@@ -1,0 +1,28 @@
+version: '3.9'
+services:
+  backend:
+    build:
+      context: ./backend
+    environment:
+      - BACKEND_PORT=8081
+      - BACKEND_CORS_ORIGIN=http://localhost:3000
+    ports:
+      - "8081:8081"
+  frontend:
+    build:
+      context: ./frontend
+    environment:
+      - NEXT_PUBLIC_BACKEND_URL=http://localhost:8081
+    ports:
+      - "3000:3000"
+    depends_on:
+      - backend
+  # db: # placeholder for Postgres
+  #   image: postgres:16
+  #   environment:
+  #     - POSTGRES_USER=chainsleuth
+  #     - POSTGRES_PASSWORD=chainsleuth
+  #     - POSTGRES_DB=chainsleuth
+  #   ports:
+  #     - "5432:5432"
+

@@ -1,0 +1,18 @@
+# General
+.DS_Store
+*.log
+node_modules/
+dist/
+build/
+
+# Rust
+target/
+Cargo.lock
+
+# Next.js
+.next/
+.eslintcache
+
+# Docker
+.env
+
