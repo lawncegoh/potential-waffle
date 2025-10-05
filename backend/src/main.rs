@@ -63,7 +63,12 @@ struct RunEvent {
 }
 
 #[derive(Debug, Deserialize)]
-struct CreateReportReq { project_name: String }
+struct CreateReportReq {
+    #[serde(default)]
+    project_name: Option<String>,
+    #[serde(default)]
+    token_address: Option<String>,
+}
 
 #[derive(Debug, Serialize)]
 struct CreateReportResp { run_id: String }
@@ -102,9 +107,14 @@ async fn main() -> anyhow::Result<()> {
 async fn create_report(State(st): State<AppState>, Json(req): Json<CreateReportReq>) -> Result<Json<CreateReportResp>, StatusCode> {
     let id = Uuid::new_v4().to_string();
     let now = chrono::Utc::now().timestamp();
+    let display = req
+        .token_address
+        .as_deref()
+        .or(req.project_name.as_deref())
+        .unwrap_or("unknown");
     let record = RunRecord {
         id: id.clone(),
-        project: req.project_name.clone(),
+        project: display.to_string(),
         status: "queued".into(),
         progress: 0,
         started_at: now,

@@ -1,6 +1,6 @@
 import { BACKEND_URL } from '@/shared/config'
 
-export type CreateReportReq = { project_name: string }
+export type CreateReportReq = { token_address?: string; project_name?: string }
 export type CreateReportResp = { run_id: string }
 
 export type RunRecord = {
@@ -15,11 +15,11 @@ export type RunRecord = {
   error?: string
 }
 
-export async function createReport(projectName: string): Promise<CreateReportResp> {
+export async function createReportToken(tokenAddress: string): Promise<CreateReportResp> {
   const res = await fetch(`${BACKEND_URL}/report`, {
     method: 'POST',
     headers: { 'content-type': 'application/json' },
-    body: JSON.stringify({ project_name: projectName } satisfies CreateReportReq),
+    body: JSON.stringify({ token_address: tokenAddress } satisfies CreateReportReq),
   })
   if (!res.ok) throw new Error(`HTTP ${res.status}`)
   return res.json()
@@ -30,4 +30,3 @@ export async function getReport(id: string): Promise<RunRecord> {
   if (!res.ok) throw new Error(`HTTP ${res.status}`)
   return res.json()
 }
-
